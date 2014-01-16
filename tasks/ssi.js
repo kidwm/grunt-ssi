@@ -10,20 +10,36 @@
 
 module.exports = function(grunt) {
 
-  var Path = require('path');
+  var SSI = require('./lib/ssi.js')(grunt.log.writeln);
+  var path = require('path');
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('ssi', 'Compiles HTML with SSI into static HTML pages', function() {
     // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+    var defaults = {
+      cacheDir: '.tmp/.ssiCache',
+      fileSep: path.sep,
+      includesRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/g,
+      cache: false,
+      ext: '.html',
+      encoding: 'utf8',
+    };
+
+    var options = this.options(defaults);
+
+    var ssi = new SSI(options);
+
+    if(!grunt.file.exists(options.cacheDir)) {
+      grunt.file.mkdir(options.cacheDir);
+    }
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
+
+      ssi.setBaseDir(f.orig.cwd);
+
       // Concat specified files.
       var src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
@@ -33,172 +49,19 @@ module.exports = function(grunt) {
         } else {
           return true;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      }).forEach(function(filepath) {
 
-      // Handle options.
-      src += options.punctuation;
+        var data = ssi.processFile(filepath, options.cache);
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+        var dest = f.dest; // + path.sep + path.basename(filepath, path.extname(filepath)) + options.ext;
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+        grunt.file.write(dest, data);
+        grunt.log.writeln('File "' + dest + '" created.');
+
+      });
+      
     });
+
   });
-
-  var includesRegex = /<!--\s*\#\s*include\s+(file|virtual)\s*=\s*["']([^"'<>|\b]+)['"]\s*-->/g;
-
-  var getIncludes = function (file) {
-    var matches = file.match(includes.regex);
-
-    var includes = [];
-
-    for(var i =0; i < matches.length; i++) {
-
-      var include = {
-        type: matches[i][1],
-        path: matches[i][2],
-        original: mathes[i][0]
-      };
-
-      includes.push(include);
-
-    }
-
-    return includes;
-  };
-
-  var getFullPath = function (include, workingDir) {
-    var fullPath = include.path;
-
-    if(include.type === 'file') {
-
-      fullPath = workingDir + fullPath;
-
-      fullPath = Path.normalize(fullPath);
-
-    }
-
-    return fullPath;
-  };
-
-  var getKey = function (fullPath) {
-    var key = fullPath.substring(0, fullPath.lastIndexOf(Path.extname(fullPath)) - 1);
-
-    key = key.replace(/[\\\/]/g,'-');
-
-    return key;
-  };
-
-  var getCachedFile = function(key, cacheDir) {
-
-    var filePath = cacheDir + Path.sep() + key + '.html';
-
-    var fStat = fs.statSync(filePath);
-
-    if(fstat.isFile()) {
-      return fs.readFileSync(filePath);
-    } else {
-      return null;
-    }
-
-  };
-
-  var setCachedFile = function(key, cacheDir, data) {
-    
-    var success = false;
-
-    try {
-
-      fs.writeFileSync(cacheDir + '/' + key + '.html', data);
-
-      success = true;
-
-    } catch(e) {
-
-      console.log('Could not create file for cache '+key+' - '+e);
-
-      success  = false;
-
-    }
-
-    return success;
-
-  };
-
-  var getCacheData = function(key, cache) {
-
-    var cacheData = null;
-
-    if(cache[key]) {
-      cacheData = cache[key].processed ? cache[key].data : -1;
-    } else {
-      cacheData = 0;
-    }
-
-    return cacheData;
-  };
-
-  var createCacheData = function(key, cache) {
-    cache[key] = {
-      data: null,
-      processed: false,
-    };
-  };
-
-  var setCacheData = function(cache, key, data, cacheDir, ext) {
-
-    if(cache[key]) {
-      cache[key].data = data;
-      cache[key].processed = true;
-    } else {
-      cache[key] = {
-        data: data,
-        processed: true,
-      }
-    }
-
-  };
-
-  var processFile = function(filePath, cache) {
-
-    if(cache) {
-      var key = getKey(filePath);
-      createCacheData(key, cache);
-    }
-
-    var fileData = fs.readFileSync(filePath);
-
-    var includes = getIncludes(fileData);
-
-    for(var i = 0; i < includes.length; i++) {
-
-      if(cache) {
-        var includeKey = getKey(includes[i].path);
-        var data = getCacheData(includeKey);
-
-        switch(data) {
-          -1 :
-            throw "File contains a looping include...";
-            break;  
-          0 :
-            data = processFile(include.path, cache);
-            break;
-          default:
-          break;
-        }
-      } else {
-        data = processFile(include.path, cache);
-      }
-
-      fileData.replace(include.orginal, data);
-
-    }
-
-    return fileData;
-  };
 
 };
