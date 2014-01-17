@@ -28,15 +28,19 @@ exports.ssi = {
     done();
   },
   default_options: function(test) {
-    test.expect(1);
+    test.expect(2);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    var actualLevels = grunt.file.read('.tmp/html/levels.html');
+    var expectedLevels = grunt.file.read('test/expected/levels.html');
+    test.equal(actualLevels, expectedLevels, 'should describe what the default behavior is for include file=.');
+
+    var actualVirtual = grunt.file.read('.tmp/html/virtual.html');
+    var expectedVirtual = grunt.file.read('test/expected/virtual.html');
+    test.equal(actualLevels, expectedLevels, 'should describe what the default behavior is for include virtual=.');
 
     test.done();
   },
-  custom_options: function(test) {
+  /*custom_options: function(test) {
     test.expect(1);
 
     var actual = grunt.file.read('tmp/custom_options');
@@ -44,5 +48,5 @@ exports.ssi = {
     test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
 
     test.done();
-  },
+  },*/
 };

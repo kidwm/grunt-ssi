@@ -1,3 +1,0 @@
-<footer>
-	Footer Herer
-</footer>

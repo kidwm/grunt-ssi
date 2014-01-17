@@ -37,47 +37,70 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.cacheDir
 Type: `String`
-Default value: `',  '`
+Default value: `'.tmp/.ssiCache'`
 
-A string value that is used to do something with whatever.
+The Directory Location to store the cached ssi files
 
-#### options.punctuation
+#### options.includesRegex
+Type: `Regex`
+Default value: `/<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/g`
+
+The Regex Object used to find and parse SSI Include Tags
+
+#### options.cacheDir
+Type: `String | Boolean`
+Default value: `false`
+
+Whether or not to check the cache when processing the file. `true` to use the cached version, `false` to clear the file cache, and `'all'` to clear all cached files
+
+#### options.ext
 Type: `String`
-Default value: `'.'`
+Default value: `'.html'`
 
-A string value that is used to do something else with whatever else.
+The extension to use for the outputed files.
+
+#### options.encoding
+Type: `String`
+Default value: `'utf8'`
+
+File encoding used to read and write out the files.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
+#### Standard Options
+Typical Settings as such read in `.html` files in the `/html` directory, and outputs the parsed files to `/.tmp/html`. This will only output the originating `.html` files, but still include files specified by `#include` tags such as `.inc` or `.shtml`
 ```js
 grunt.initConfig({
   ssi: {
     options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    files: [{
+          expand: true,
+          cwd: 'html',
+          src: ['**/*.html'],
+          dest: '.tmp/html',
+        }],
   },
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+Here is an example that clears the entire cache, and outputs files as `.shtml`
 
 ```js
 grunt.initConfig({
   ssi: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      cache: 'all',
+      ext: '.shtml'
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    files: [{
+          expand: true,
+          cwd: 'html',
+          src: ['**/*.html'],
+          dest: '.tmp/html',
+        }],
   },
 });
 ```
@@ -86,4 +109,4 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+Just an intial release and proof of concept
