@@ -8,7 +8,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -25,31 +25,42 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['tmp', '.tmp'],
     },
 
     // Configuration to be run (and then tested).
     ssi: {
       default_options: {
-        options: {
-        },
+        options: {},
         files: [{
           expand: true,
           cwd: 'html',
           src: ['**/*.html'],
           dest: '.tmp/html',
-          ext: '.html',
         }],
       },
       custom_options: {
         options: {
-          separator: ': ',
-          punctuation: ' !!!',
+          cacheDir: '',
         },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
+        files: [{
+            expand: true,
+            cwd: 'html',
+            src: ['**/*.html'],
+            dest: '.tmp/html',
+            ext: '.html',
+          }],
       },
+      test_default: {
+        options: {},
+        files: [{
+          expand: true,
+          cwd: 'test/fixtures/html',
+          src: ['**/*.html'],
+          dest: '.tmp/html',
+          ext: '.html',
+        }],
+      }
     },
 
     // Unit tests.
@@ -69,7 +80,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'ssi', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'ssi:test_default', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
