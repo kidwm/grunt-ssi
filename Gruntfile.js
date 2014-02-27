@@ -8,7 +8,7 @@
 
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -44,12 +44,12 @@ module.exports = function (grunt) {
           cacheDir: '',
         },
         files: [{
-            expand: true,
-            cwd: 'html',
-            src: ['**/*.html'],
-            dest: '.tmp/html',
-            ext: '.html',
-          }],
+          expand: true,
+          cwd: 'html',
+          src: ['**/*.html'],
+          dest: '.tmp/html',
+          ext: '.html',
+        }],
       },
       test_default: {
         options: {},

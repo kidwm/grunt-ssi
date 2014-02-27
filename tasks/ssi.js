@@ -25,13 +25,14 @@ module.exports = function(grunt) {
       cache: false,
       ext: '.html',
       encoding: 'utf8',
+      baseDir: 'html',
     };
 
     var options = this.options(defaults);
 
     var ssi = new SSI(options);
 
-    if(!grunt.file.exists(options.cacheDir)) {
+    if (!grunt.file.exists(options.cacheDir)) {
       grunt.file.mkdir(options.cacheDir);
     }
 
@@ -59,7 +60,7 @@ module.exports = function(grunt) {
         grunt.log.writeln('File "' + dest + '" created.');
 
       });
-      
+
     });
 
   });
