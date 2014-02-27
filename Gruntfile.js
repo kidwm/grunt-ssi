@@ -45,10 +45,10 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'test/fixtures',
-          src: ['html/**/*.html'],
-          dest: '.tmp/',
-
+          cwd: 'html',
+          src: ['**/*.html'],
+          dest: '.tmp/html',
+          ext: '.html',
         }],
       },
       test_default: {
