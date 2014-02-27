@@ -37,6 +37,12 @@ grunt.initConfig({
 
 ### Options
 
+#### options.baseDir
+Type: `String`
+Default value: `'html'`
+
+The Directory location where to locate Server Side Includes from.
+
 #### options.cacheDir
 Type: `String`
 Default value: `'.tmp/.ssiCache'`
@@ -77,7 +83,7 @@ grunt.initConfig({
     options: {},
     files: [{
           expand: true,
-          cwd: 'html',
+          cwd: 'html'
           src: ['**/*.html'],
           dest: '.tmp/html',
         }],
@@ -93,7 +99,8 @@ grunt.initConfig({
   ssi: {
     options: {
       cache: 'all',
-      ext: '.shtml'
+      ext: '.shtml',
+      baseDir: 'path/to/views',
     },
     files: [{
           expand: true,

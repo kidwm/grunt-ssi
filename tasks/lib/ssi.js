@@ -15,60 +15,60 @@ module.exports = function(logger) {
   var extend = require('node.extend');
 
   var log = logger ? logger : function() {
-    var args = [].slice.call(arguments);
-    console.log(args.join(' '));
-  };
+      var args = [].slice.call(arguments);
+      console.log(args.join(' '));
+    };
 
   console.log(logger);
 
   var defaults = {
-  	cacheDir: '.tmp/html',
-  	fileSep: path.sep,
-  	ssiRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/gi,
+    cacheDir: '.tmp/html',
+    fileSep: path.sep,
+    ssiRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/gi,
     includeRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/,
-  	cache: true,
-  	ext: '.html',
-  	baseDir: process.cwd(),
-  	encoding: 'utf8',
+    cache: true,
+    ext: '.html',
+    baseDir: process.cwd(),
+    encoding: 'utf8',
     errorMessage: '[There was an error processing this include]',
   };
 
   var removeDir = function(dir, keepDir) {
-  	try {
-  		var files = fs.readdirSync(dir);
-  	} catch(e) { 
-  		return;
-  	}
+    try {
+      var files = fs.readdirSync(dir);
+    } catch (e) {
+      return;
+    }
 
-  	if(files.length > 0) {
-  		for(var i = 0; i < files.length; i++) {
-  			var filePath = dirPath + path.sep + files[i];
-  			if(fs.statSync(filePath).isFile()) {
-  				fs.unlinkSync(filePath);
-  			} else {
-  				removeDir(filePath);
-  			}
-  		}
-  	}
-  	if(!keepDir) {
-  		fs.rmdirSync(dir);
-  	}
+    if (files.length > 0) {
+      for (var i = 0; i < files.length; i++) {
+        var filePath = dirPath + path.sep + files[i];
+        if (fs.statSync(filePath).isFile()) {
+          fs.unlinkSync(filePath);
+        } else {
+          removeDir(filePath);
+        }
+      }
+    }
+    if (!keepDir) {
+      fs.rmdirSync(dir);
+    }
   };
 
   var SSI = function(options, cache) {
 
-  	this.dataCache = {};
+    this.dataCache = {};
 
-  	this.settings = extend(true, defaults, options);
+    this.settings = extend(true, defaults, options);
 
-  	if(cache) {
-  		this.dataCache = extend(true, this.dataCache, cache);
-  	}
+    if (cache) {
+      this.dataCache = extend(true, this.dataCache, cache);
+    }
 
     this.baseDir = this.settings.baseDir;
     this.currDir = this.settings.baseDir;
 
-  	return this;
+    return this;
 
   };
 
@@ -84,17 +84,17 @@ module.exports = function(logger) {
 
   SSI.prototype.getIncludes = function(html) {
 
-  	var matches =  html.match(this.settings.ssiRegex);
+    var matches = html.match(this.settings.ssiRegex);
 
-  	var includes = [];
+    var includes = [];
 
-    if(matches) {
+    if (matches) {
 
-    	for(var i =0; i < matches.length; i++) {
+      for (var i = 0; i < matches.length; i++) {
 
         var includeParts = this.settings.includeRegex.exec(matches[i]);
 
-        if(includeParts) {
+        if (includeParts) {
 
           var include = {
             type: includeParts[1],
@@ -108,52 +108,52 @@ module.exports = function(logger) {
       }
     }
 
-  	return includes;
+    return includes;
 
   };
 
   SSI.prototype.getFullPath = function(include, currDir) {
 
-  	var fullPath = this.baseDir;
+    var fullPath = this.baseDir;
 
-  	if(include.type.toLowerCase() === 'file' && currDir && currDir !== '') {
-  		fullPath = fullPath + this.settings.fileSep + currDir;
-  	}
+    if (include.type.toLowerCase() === 'file' && currDir && currDir !== '') {
+      fullPath = fullPath + this.settings.fileSep + currDir;
+    }
 
     fullPath = fullPath + this.settings.fileSep + include.path;
 
     fullPath = path.normalize(fullPath);
 
-  	return fullPath;
+    return fullPath;
 
   };
 
   SSI.prototype.getKey = function(filePath) {
-  	var key = filePath.substring(0, filePath.lastIndexOf(path.extname(filePath)));
+    var key = filePath.substring(0, filePath.lastIndexOf(path.extname(filePath)));
 
-    key = key.replace(/[\\\/]/g,'-');
+    key = key.replace(/[\\\/]/g, '-');
 
     return key;
   };
 
   SSI.prototype._getCacheFilePath = function(key) {
 
-  	return this.settings.cacheDir + this.settings.fileSep + key + this.settings.ext;
+    return this.settings.cacheDir + this.settings.fileSep + key + this.settings.ext;
 
   };
 
   SSI.prototype.getCacheFile = function(key) {
 
-  	var filePath = this._getCacheFilePath(key)
+    var filePath = this._getCacheFilePath(key)
 
-  	var stat = fs.statSync(filePath);
+    var stat = fs.statSync(filePath);
 
-  	try {
+    try {
 
-  		return stat.isFile() ? fs.readFileSync(filePath, 'utf8') : null;
-  	} catch(e) {
-  		return null;
-  	}
+      return stat.isFile() ? fs.readFileSync(filePath, 'utf8') : null;
+    } catch (e) {
+      return null;
+    }
 
   };
 
@@ -165,32 +165,32 @@ module.exports = function(logger) {
 
     try {
       return stat.isFile() ? fs.fs.unlinkSync(filePath) : null;
-    } catch(e) {
-      console.log('Error removing file \'' + filePath +'\' ' +e);
+    } catch (e) {
+      console.log('Error removing file \'' + filePath + '\' ' + e);
       return null;
     }
 
   };
 
-  SSI.prototype.setCacheFile = function (key, data, encoding) {
+  SSI.prototype.setCacheFile = function(key, data, encoding) {
 
-  	var filePath = this._getCacheFilePath(key);
+    var filePath = this._getCacheFilePath(key);
 
-  	var encode = encoding ? encoding : this.settings.encoding;
+    var encode = encoding ? encoding : this.settings.encoding;
 
-  	fs.writeFileSync(filePath, data, {endcoding: encode});
+    fs.writeFileSync(filePath, data, encode);
 
   };
 
   SSI.prototype.getCacheData = function(key) {
 
-  	if(!this.dataCache[key]) {
+    if (!this.dataCache[key]) {
       return null;
-    } 
+    }
 
     var data = this.dataCache[key].data;
-    
-    if(this.dataCache[key].processed) {
+
+    if (this.dataCache[key].processed) {
       return data;
     } else {
       return data.replace(this.settings.ssiRegex, this.settings.errorMessage);
@@ -200,7 +200,7 @@ module.exports = function(logger) {
 
   SSI.prototype.createCacheData = function(key, data) {
 
-  	this.dataCache[key] = {
+    this.dataCache[key] = {
       data: data,
       processed: false,
     };
@@ -209,7 +209,7 @@ module.exports = function(logger) {
 
   SSI.prototype.setCacheData = function(key, data) {
 
-  	this.dataCache[key] = {
+    this.dataCache[key] = {
       data: data,
       processed: true,
     };
@@ -229,32 +229,32 @@ module.exports = function(logger) {
 
     encoding = encoding ? encoding : 'utf8';
 
-    log('Creating cache for '+key);
+    log('Creating cache for ' + key);
 
-  	try {
-  		this.setCacheFile(key, data, encoding);
-  	} catch(e) {
-  		log('Could not create cache file for '+key+': '+e);
-  	}
+    try {
+      this.setCacheFile(key, data, encoding);
+    } catch (e) {
+      log('Could not create cache file for ' + key + ': ' + e);
+    }
 
-  	this.setCacheData(key, data);
+    this.setCacheData(key, data);
 
   };
 
   SSI.prototype.getCache = function(key) {
 
-  	var data = this.getCacheData(key);
+    var data = this.getCacheData(key);
 
-  	if(!data || data === 0 || data === -1) {
-  		try {
-  			data = this.getCacheFile(key);
-  		} catch(e) {
-  			log('No cache found for '+key);
-  			return null;
-  		}
-  	}
+    if (!data || data === 0 || data === -1) {
+      try {
+        data = this.getCacheFile(key);
+      } catch (e) {
+        log('No cache found for ' + key);
+        return null;
+      }
+    }
 
-  	return data;
+    return data;
 
   };
 
@@ -262,26 +262,26 @@ module.exports = function(logger) {
 
     log('Processing File: ', filePath);
 
-  	var key = this.getKey(filePath);
+    var key = this.getKey(filePath);
 
-    if(clearCache === 'all') {
+    if (clearCache === 'all') {
       this.clearCache();
-    } else if(clearCache) {
+    } else if (clearCache) {
       this.deleteCache(key);
     }
 
-    if(!currDir) {
+    if (!currDir) {
       currDir = '';
     }
 
-	  var cachedData = this.getCache(key);
-	  if(cachedData !== null) {
-	  	return cachedData;
-	  } else {
+    var cachedData = this.getCache(key);
+    if (cachedData !== null) {
+      return cachedData;
+    } else {
 
       var fileData = this._getFileData(filePath);
 
-      if(fileData !== null) {
+      if (fileData !== null) {
 
         this.createCacheData(key, fileData);
 
@@ -301,57 +301,57 @@ module.exports = function(logger) {
 
   SSI.prototype.clearCache = function() {
 
-  	this.dataCache = {};
+    this.dataCache = {};
 
-		removeDir(this.settings.cacheDir, true);
+    removeDir(this.settings.cacheDir, true);
 
   };
 
 
-  SSI.prototype._getFileData= function(filePath) {
-  	
-  	try {
-			var fileData = fs.readFileSync(filePath, 'utf8');
-		} catch(e) {
-			return null;
-		}
+  SSI.prototype._getFileData = function(filePath) {
 
-		return fileData;
+    try {
+      var fileData = fs.readFileSync(filePath, 'utf8');
+    } catch (e) {
+      return null;
+    }
+
+    return fileData;
 
   };
 
   SSI.prototype.processData = function(fileData, currDir, clearCache) {
 
-  	if(clearCache) {
-  		this.clearCache();
-  	}
+    if (clearCache) {
+      this.clearCache();
+    }
 
     log('Processing Data...');
 
     currDir = currDir ? currDir : '';
 
-  	var includes = this.getIncludes(fileData);
+    var includes = this.getIncludes(fileData);
 
-  	var html = fileData;
+    var html = fileData;
 
-    if(includes) {
+    if (includes) {
 
-    	for(var i = 0; i < includes.length; i++) {
+      for (var i = 0; i < includes.length; i++) {
 
-    		var include = includes[i];
+        var include = includes[i];
 
         var newDir = currDir + this.settings.fileSep + path.dirname(include.path);
 
         var filePath = this.getFullPath(includes[i], currDir);
 
-    		var data = this.processFile(filePath, newDir, false);
+        var data = this.processFile(filePath, newDir, false);
 
-    		html = html.replace(include.original, data);
+        html = html.replace(include.original, data);
 
-    	}
+      }
     }
 
-  	return html;
+    return html;
 
   };
 
