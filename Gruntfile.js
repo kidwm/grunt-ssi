@@ -30,33 +30,31 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     ssi: {
-      options: {
-        baseDir: 'test/fixtures/html/',
-      },
+      options: {},
       default_options: {
         options: {},
         files: [{
           expand: true,
-          cwd: 'test/fixtures',
-          src: ['html/**/*.html'],
-          dest: '.tmp/',
-          ext: '.html',
+          src: ['html/*'],
         }],
       },
       custom_options: {
         options: {
           cacheDir: '',
+
         },
         files: [{
           expand: true,
           cwd: 'test/fixtures',
           src: ['html/**/*.html'],
           dest: '.tmp/',
-          ext: '.html',
+
         }],
       },
       test_default: {
-        options: {},
+        options: {
+          baseDir: 'test/fixtures/html/',
+        },
         files: [{
           expand: true,
           cwd: 'test/fixtures',

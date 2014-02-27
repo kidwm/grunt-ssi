@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       cache: false,
       ext: '.html',
       encoding: 'utf8',
-      baseDir: process.cwd(),
+      baseDir: 'html',
     };
 
     var options = this.options(defaults);
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
       // Concat specified files.
       var src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
+        if (!grunt.file.exists(filepath) || grunt.file.isDir(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
         } else {
@@ -53,9 +53,11 @@ module.exports = function(grunt) {
         }
       }).forEach(function(filepath) {
 
+        grunt.log.writeln('File to process: ' + f.src + ' - ' + filepath + ' dest: ' + f.dest);
+
         var data = ssi.processFile(filepath, options.cache);
 
-        var dest = f.dest; // + path.sep + path.basename(filepath, path.extname(filepath)) + options.ext;
+        var dest = f.dest ? f.dest : path.join('output', filepath); // + path.sep + path.basename(filepath, path.extname(filepath)) + options.ext;
 
         grunt.file.write(dest, data);
         grunt.log.writeln('File "' + dest + '" created.');
