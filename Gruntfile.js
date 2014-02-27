@@ -8,7 +8,7 @@
 
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -30,13 +30,17 @@ module.exports = function (grunt) {
 
     // Configuration to be run (and then tested).
     ssi: {
+      options: {
+        baseDir: 'test/fixtures/html/',
+      },
       default_options: {
         options: {},
         files: [{
           expand: true,
-          cwd: 'html',
-          src: ['**/*.html'],
-          dest: '.tmp/html',
+          cwd: 'test/fixtures',
+          src: ['html/**/*.html'],
+          dest: '.tmp/',
+          ext: '.html',
         }],
       },
       custom_options: {
@@ -44,20 +48,20 @@ module.exports = function (grunt) {
           cacheDir: '',
         },
         files: [{
-            expand: true,
-            cwd: 'html',
-            src: ['**/*.html'],
-            dest: '.tmp/html',
-            ext: '.html',
-          }],
+          expand: true,
+          cwd: 'test/fixtures',
+          src: ['html/**/*.html'],
+          dest: '.tmp/',
+          ext: '.html',
+        }],
       },
       test_default: {
         options: {},
         files: [{
           expand: true,
-          cwd: 'test/fixtures/html',
-          src: ['**/*.html'],
-          dest: '.tmp/html',
+          cwd: 'test/fixtures',
+          src: ['html/**/*.html'],
+          dest: '.tmp/',
           ext: '.html',
         }],
       }

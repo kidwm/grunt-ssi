@@ -25,20 +25,22 @@ module.exports = function(grunt) {
       cache: false,
       ext: '.html',
       encoding: 'utf8',
+      baseDir: process.cwd(),
     };
 
     var options = this.options(defaults);
 
     var ssi = new SSI(options);
 
-    if(!grunt.file.exists(options.cacheDir)) {
+    if (!grunt.file.exists(options.cacheDir)) {
       grunt.file.mkdir(options.cacheDir);
     }
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
 
-      ssi.setBaseDir(f.orig.cwd);
+      grunt.log.writeln('BaseDir: ' + options.baseDir);
+      ssi.setBaseDir(options.baseDir);
 
       // Concat specified files.
       var src = f.src.filter(function(filepath) {
@@ -59,7 +61,7 @@ module.exports = function(grunt) {
         grunt.log.writeln('File "' + dest + '" created.');
 
       });
-      
+
     });
 
   });
