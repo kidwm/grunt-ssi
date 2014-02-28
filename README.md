@@ -55,7 +55,7 @@ Default value: `/<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/g`
 
 The Regex Object used to find and parse SSI Include Tags
 
-#### options.cacheDir
+#### options.cache
 Type: `String | Boolean`
 Default value: `false`
 
