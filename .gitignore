@@ -1,4 +1,4 @@
-node_modules
+/.tmp
+/.tmp/.ssiCache
 npm-debug.log
-tmp
-.tmp
+node_modules
