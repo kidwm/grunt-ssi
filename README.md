@@ -55,7 +55,7 @@ Default value: `/<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/g`
 
 The Regex Object used to find and parse SSI Include Tags
 
-#### options.cacheDir
+#### options.cache
 Type: `String | Boolean`
 Default value: `false`
 
@@ -116,4 +116,12 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-Just an intial release and proof of concept
+### 0.2.0 (3rd Mar 2014) (Current)
+Updated to allow for proper Grunt Logging for normal use and verbose
+and Fixes for passing the cache clear option
+
+### 0.1.2 (26th Feb 2014)
+Fixes to use the proper Grunt Files options
+
+### 0.0.1 (Jan 2014)
+Intial release and proof of concept
