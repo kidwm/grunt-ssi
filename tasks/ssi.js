@@ -10,7 +10,7 @@
 
 module.exports = function (grunt) {
 
-    var SSI = require('./lib/ssi.js')(grunt.log.writeln, grunt);
+    var SSI = require('./lib/ssi.js')(grunt);
     var path = require('path');
 
     // Please see the Grunt documentation for more information regarding task
@@ -57,8 +57,10 @@ module.exports = function (grunt) {
                 grunt.verbose.write('Creating File \'' + f.dest + '\' from \'' + filepath + '\'')
                 var data = ssi.processFile(filepath, null, options.cache);
 
-                var dest = f.dest ? f.dest : path.join('output', filepath); // + path.sep + path.basename(filepath, path.extname(filepath)) + options.ext;
+                //Check if dest is set, if not default to 'output'
+                var dest = f.dest ? f.dest : path.join('output', filepath);
 
+                //Create the processed file
                 grunt.file.write(dest, data);
                 grunt.verbose.or.ok();
                 grunt.verbose.ok();
