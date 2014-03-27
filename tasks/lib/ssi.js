@@ -21,8 +21,8 @@ module.exports = function (grunt) {
     var defaults = {
         cacheDir: '.tmp/html',
         fileSep: path.sep,
-        ssiRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/gi,
-        includeRegex: /<!--\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s+-->/,
+        ssiRegex: /<!--\s*\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s*-->/gi,
+        includeRegex: /<!--\s*\#include\s+(file|virtual)=["']([^"'<>|\b]+)['"]\s*-->/,
         cache: true,
         ext: '.html',
         baseDir: process.cwd(),
