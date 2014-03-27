@@ -1,7 +1,7 @@
 {
   "name": "grunt-ssi",
   "description": "Compiles HTML with SSI into static HTML pages",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/anguspiv/grunt-ssi",
   "author": {
     "name": "Angus Perkerson",
