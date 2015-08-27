@@ -83,9 +83,9 @@ grunt.initConfig({
     options: {},
     files: [{
           expand: true,
-          cwd: 'html'
+          cwd: 'html',
           src: ['**/*.html'],
-          dest: '.tmp/html',
+          dest: '.tmp/html'
         }],
   },
 });
