@@ -2,6 +2,8 @@
 
 > Compiles HTML with SSI into static HTML pages
 
+  NOTE: I'm not currently supporting this plugin, and I do not have any plans to maintain or update this plugin in the future. But I will keep it up if people want to use it and maintain it themselves, if anyone would like to take it over please let me know.
+
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
 
