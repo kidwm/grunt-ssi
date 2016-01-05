@@ -83,12 +83,14 @@ Typical Settings as such read in `.html` files in the `/html` directory, and out
 grunt.initConfig({
   ssi: {
     options: {},
-    files: [{
+    target: {
+      files: [{
           expand: true,
           cwd: 'html',
           src: ['**/*.html'],
           dest: '.tmp/html'
         }],
+    }
   },
 });
 ```
@@ -104,12 +106,14 @@ grunt.initConfig({
       ext: '.shtml',
       baseDir: 'path/to/views',
     },
-    files: [{
+    target: {
+      files: [{
           expand: true,
           cwd: 'html',
           src: ['**/*.html'],
-          dest: '.tmp/html',
-        }],
+          dest: '.tmp/html'
+        }]
+    }
   },
 });
 ```
