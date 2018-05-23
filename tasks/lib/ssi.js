@@ -224,7 +224,7 @@ module.exports = function (grunt) {
             grunt.verbose.ok();
             return fileData;
         } catch (e) {
-            grunt.verbose.warn().warn(e.message);
+            grunt.fail.fatal(e.message);
             return null;
         }
 
@@ -291,6 +291,9 @@ module.exports = function (grunt) {
         if (this.dataCache[key].processed) {
             return data;
         } else {
+            grunt.fail.fatal("Cached data for key "+key+
+              " was found but had not been processed.  Check for a cyclical dependency.");
+
             return data.replace(this.settings.ssiRegex, this.settings.errorMessage);
         }
 
@@ -430,6 +433,7 @@ module.exports = function (grunt) {
                 return data;
 
             } else {
+                grunt.fail.fatal('Unable to retrieve data for '+filePath);
                 return this.settings.errorMessage;
             }
         }
@@ -462,7 +466,8 @@ module.exports = function (grunt) {
             var fileData = fs.readFileSync(filePath, 'utf8');
             grunt.verbose.ok();
         } catch (e) {
-            grunt.verbose.writeln('Error reading file \'' + filePath + '\' ').error().error(e.message);
+            grunt.fail.fatal('Error reading file \'' + filePath +
+              '\. Use --verbose and look for the previous file read.').error().error(e.message);
             return null;
         }
 

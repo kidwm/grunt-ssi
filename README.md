@@ -119,7 +119,13 @@ grunt.initConfig({
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
+
 ## Release History
+### 1.0.0 (23rd May 2018)
+The task now fails and halts for at least some problems when processing files,
+rather than failing silently and inserting a message into the output file.
+(This is potentially a breaking change for someone, which is why this is 1.0.)
+
 ### 0.2.0 (3rd Mar 2014) (Current)
 Updated to allow for proper Grunt Logging for normal use and verbose
 and Fixes for passing the cache clear option
